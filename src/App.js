@@ -4,6 +4,7 @@ import Recorder from "./components/Recorder";
 import Recordings from "./components/Recordings";
 import Settings from "./components/Settings";
 import useFilesystem from "./services/filesystem";
+import { Container } from "./styles/Layout";
 
 const FILE_SYSTEM_SIZE = 10 * 1024 * 1024;
 
@@ -16,10 +17,10 @@ export default () => {
   const [files, { saveFile, deleteFile }] = useFilesystem(FILE_SYSTEM_SIZE);
 
   return (
-    <div>
-      {/* <Settings onConfigChange={setConfig} /> */}
-      <Recorder config={config} saveRecording={saveFile} />
+    <Container>
       <Recordings recordings={files} deleteRecording={deleteFile} />
-    </div>
+      <Recorder config={config} saveRecording={saveFile} />
+      <Settings onConfigChange={setConfig} />
+    </Container>
   );
 };

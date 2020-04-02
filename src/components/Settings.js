@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+
+import { Header, Wrapper } from "../styles/Layout";
 
 async function getAudioInputDevices() {
   if (!("mediaDevices" in navigator)) return [];
@@ -15,8 +18,11 @@ export default ({ onConfigChange }) => {
   }, [availableMics]);
 
   return (
-    <div>
-      <h3>Options</h3>
+    <Wrapper>
+      {" "}
+      <Header>
+        <h3>Options</h3>
+      </Header>
       <div onChange={({ target: { value } }) => setSelectedMicIndex(value)}>
         <p>Select input:</p>
         {availableMics.map(({ deviceId }, i) => (
@@ -26,6 +32,6 @@ export default ({ onConfigChange }) => {
           </p>
         ))}
       </div>
-    </div>
+    </Wrapper>
   );
 };
