@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Container = styled.div`
   display: flex;
@@ -7,14 +7,16 @@ export const Container = styled.div`
   margin-left: auto;
   margin-right: auto;
   width: 70%;
-  background: #f7fafc;
-  border-radius: 1rem;
+  height: 70vh;
+  background: #f5f8fa;
+  border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   @media screen and (max-width: 768px) {
     width: 100%;
     margin-top: 0;
+    height: 100vh;
   }
 `;
 
@@ -23,7 +25,13 @@ export const Wrapper = styled.div`
   font-family: "Work Sans", sans-serif;
   @media screen and (max-width: 768px) {
     min-height: 100vh;
+    ${(props) =>
+      !props.visibleOnPhone &&
+      css`
+        display: none;
+      `}
   }
+  height: inherit;
 `;
 
 export const Header = styled.div`

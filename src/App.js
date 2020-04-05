@@ -11,16 +11,36 @@ const FILE_SYSTEM_SIZE = 10 * 1024 * 1024;
 export default () => {
   const [config, setConfig] = useState({
     deviceId: "default",
-    fileOptions: { mimeType: "audio/webm" }
+    fileOptions: { mimeType: "audio/webm" },
   });
 
+  const [isRecordingsVisibleOnPhone, setIsRecordingsVisibleOnPhone] = useState(
+    false
+  );
+  const [isSettingsVisibleOnPhone, setIsSettingsVisibleOnPhone] = useState(
+    false
+  );
   const [files, { saveFile, deleteFile }] = useFilesystem(FILE_SYSTEM_SIZE);
 
   return (
     <Container>
-      <Recordings recordings={files} deleteRecording={deleteFile} />
-      <Recorder config={config} saveRecording={saveFile} />
-      <Settings onConfigChange={setConfig} />
+      <Recordings
+        visibleOnPhone={isRecordingsVisibleOnPhone}
+        setIsVisibleOnPhone={setIsRecordingsVisibleOnPhone}
+        recordings={files}
+        deleteRecording={deleteFile}
+      />
+      <Settings
+        visibleOnPhone={isSettingsVisibleOnPhone}
+        setIsVisibleOnPhone={setIsSettingsVisibleOnPhone}
+        onConfigChange={setConfig}
+      />
+      <Recorder
+        setIsRecordingsVisibleOnPhone={setIsRecordingsVisibleOnPhone}
+        setIsSettingsVisibleOnPhone={setIsSettingsVisibleOnPhone}
+        config={config}
+        saveRecording={saveFile}
+      />
     </Container>
   );
 };

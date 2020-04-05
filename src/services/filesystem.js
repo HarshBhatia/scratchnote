@@ -48,15 +48,22 @@ export default ({ fileSystemSize }) => {
     readEntries(); // Start reading dirs.
   }, [fileCount, fileSystem]);
 
-  const saveFile = (blob, fileName = `reording${fileCount}`) => {
-    fileSystem.root.getFile(fileName, { create: true }, function(file) {
-      file.createWriter(function(fileContent) {
-        fileContent.write(blob);
-        setFileCount(fileCount + 1);
-      });
-    });
+  const saveFile = (blob, fileName) => {
+    fileSystem.root.getFile(
+      fileName || `recording${fileCount}`,
+      { create: true },
+      function(file) {
+        file.createWriter(function(fileContent) {
+          fileContent.write(blob);
+          setFileCount(fileCount + 1);
+        });
+      }
+    );
   };
-  const deleteFile = () => {};
+  const deleteFile = f => {
+    console.log(f);
+    alert(`Delete file: ${f.name}?`);
+  };
 
   return [files, { saveFile, deleteFile }];
 };
