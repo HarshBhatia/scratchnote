@@ -16,7 +16,7 @@ export const Container = styled.div`
   @media screen and (max-width: 768px) {
     width: 100%;
     margin-top: 0;
-    height: 100vh;
+    height: inherit;
   }
 `;
 
@@ -24,7 +24,6 @@ export const Wrapper = styled.div`
   flex: 300px;
   font-family: "Work Sans", sans-serif;
   @media screen and (max-width: 768px) {
-    min-height: 100vh;
     ${(props) =>
       !props.visibleOnPhone &&
       css`

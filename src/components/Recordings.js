@@ -1,14 +1,24 @@
-import React from "react";
+import localforage from "localforage";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { Header, Wrapper } from "../styles/Layout";
 
+const dtfIN = new Intl.DateTimeFormat("IN", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+});
 export default ({
   recordings,
   deleteRecording,
   visibleOnPhone,
   setIsVisibleOnPhone,
 }) => {
+  const [playingKey, setPlayingKey] = useState(null);
+  const [playingFile, setPlayingFile] = useState(null);
   return (
     <Wrapper visibleOnPhone={visibleOnPhone}>
       <CloseButton onClick={() => setIsVisibleOnPhone(false)}>
@@ -18,21 +28,33 @@ export default ({
         <h3>Recordings</h3>
       </Header>
       <RecordingList>
-        {recordings.map((f) => (
-          <RecordingContainer key={f.name}>
-            <Title>{f.name}</Title>
-            <Controls>
-              <Player src={f.toURL()} controls />
-              <DeleteButton onClick={() => deleteRecording(f)}>
+        {recordings &&
+          Object.keys(recordings).map((k) => (
+            <RecordingContainer
+              key={k}
+              onClick={async () => {
+                if (playingKey === k) return setPlayingKey(null);
+                setPlayingKey(k);
+                setPlayingFile(
+                  URL.createObjectURL(await localforage.getItem(`file:${k}`))
+                );
+              }}
+            >
+              {/* <p>{JSON.stringify(recordings[k])}</p> */}
+              <Title>{recordings[k].name}</Title>
+              <TimeStamp>{dtfIN.format(recordings[k].createdAt)}</TimeStamp>
+              <DeleteButton onClick={() => deleteRecording(k)}>
                 <img
                   src={require("../assets/trash.svg")}
                   alt={"Delete"}
                   style={{ height: "1.35rem" }}
                 />
               </DeleteButton>
-            </Controls>
-          </RecordingContainer>
-        ))}
+              {playingKey === k && (
+                <Player autoplay src={playingFile} controls />
+              )}
+            </RecordingContainer>
+          ))}
       </RecordingList>
     </Wrapper>
   );
@@ -40,21 +62,29 @@ export default ({
 const Title = styled.p`
   font-weight: 500;
   text-transform: uppercase;
+  font-size: 16px;
+  margin-bottom: 10px;
+`;
+const TimeStamp = styled.span`
+  font-weight: 500;
+  text-transform: uppercase;
   font-size: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 0;
+  color: #555555;
 `;
 const Player = styled.audio`
   width: fill-available;
   -webkit-appearance: none;
   color: white;
-  height: 20px;
 `;
 const DeleteButton = styled.button`
   appearance: none;
   border: none;
   background: transparent;
   color: #212121;
-  margin-top: -3px;
+  position: absolute;
+  right: 1rem;
+  top: 1.7rem;
 
   filter: invert(32%) sepia(8%) saturate(1381%) hue-rotate(180deg)
     brightness(93%) contrast(87%);
@@ -75,6 +105,7 @@ const Controls = styled.div`
   display: flex;
 `;
 const RecordingContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 1rem;

@@ -11,6 +11,7 @@ export default ({
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordedFile, setRecordedFile] = useState(null);
+  const [recordedFileURL, setRecordedFileURL] = useState("");
   const [recorder, setRecorder] = useState(null);
 
   useEffect(() => {
@@ -31,7 +32,9 @@ export default ({
         });
 
         mediaRecorder.addEventListener("stop", function () {
-          setRecordedFile(new Blob(recordedChunks));
+          const blob = new Blob(recordedChunks);
+          setRecordedFile(blob);
+          setRecordedFileURL(URL.createObjectURL(blob));
           recordedChunks = [];
         });
         console.log("media recorder init success!");
@@ -83,10 +86,7 @@ export default ({
         {isRecording ? (
           <Indicator>RECORDING...</Indicator>
         ) : recordedFile ? (
-          <audio
-            controls
-            src={recordedFile ? URL.createObjectURL(recordedFile) : ""}
-          />
+          <audio controls src={recordedFileURL} />
         ) : null}
       </Player>
       <RecordingsButton onClick={() => setIsRecordingsVisibleOnPhone(true)}>

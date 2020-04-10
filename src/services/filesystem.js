@@ -28,9 +28,9 @@ export default ({ fileSystemSize }) => {
     var dirReader = fileSystem.root.createReader();
     var entries = [];
     // Call the reader.readEntries() until no more results are returned.
-    var readEntries = function() {
+    var readEntries = function () {
       dirReader.readEntries(
-        function(results) {
+        function (results) {
           if (!results.length) {
             setFiles(entries.sort());
             setFileCount(entries.length);
@@ -39,7 +39,7 @@ export default ({ fileSystemSize }) => {
             readEntries();
           }
         },
-        e => {
+        (e) => {
           throw new Error(e);
         }
       );
@@ -52,15 +52,15 @@ export default ({ fileSystemSize }) => {
     fileSystem.root.getFile(
       fileName || `recording${fileCount}`,
       { create: true },
-      function(file) {
-        file.createWriter(function(fileContent) {
+      function (file) {
+        file.createWriter(function (fileContent) {
           fileContent.write(blob);
           setFileCount(fileCount + 1);
         });
       }
     );
   };
-  const deleteFile = f => {
+  const deleteFile = (f) => {
     console.log(f);
     alert(`Delete file: ${f.name}?`);
   };

@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import Recorder from "./components/Recorder";
 import Recordings from "./components/Recordings";
 import Settings from "./components/Settings";
-import useFilesystem from "./services/filesystem";
+import useFilesystem from "./services/fileSystemNew";
 import { Container } from "./styles/Layout";
 
+const FILE_SYSTEM_NAME = "scratchnote";
 const FILE_SYSTEM_SIZE = 10 * 1024 * 1024;
 
 export default () => {
@@ -20,7 +21,10 @@ export default () => {
   const [isSettingsVisibleOnPhone, setIsSettingsVisibleOnPhone] = useState(
     false
   );
-  const [files, { saveFile, deleteFile }] = useFilesystem(FILE_SYSTEM_SIZE);
+  const [files, { saveFile, deleteFile }] = useFilesystem(
+    FILE_SYSTEM_NAME,
+    FILE_SYSTEM_SIZE
+  );
 
   return (
     <Container>
